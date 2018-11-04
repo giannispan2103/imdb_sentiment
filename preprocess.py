@@ -3,7 +3,7 @@ from review import Review
 import os
 import random
 import pandas as pd
-from paths import TRAIN_DATA_PATH, TRANSLATIONS_PATH, TEST_DATA_PATH, DATA_PATH, SUMMARIES_PATH, EMBEDDINGS_PATH
+from paths import TRANSLATIONS_PATH, DATA_PATH, SUMMARIES_PATH, EMBEDDINGS_PATH
 PAD_TOKEN = "*$*PAD*$*"
 UNK_TOKEN = "*$*UNK*$*"
 UNK_MOV = "$#$#Nan#$#$"
@@ -66,7 +66,7 @@ def get_embeddings(path=EMBEDDINGS_PATH, size=50):
     """
     embeddings_dict = {}
     f_path = path % size
-    with open(f_path) as f:
+    with open(f_path,'r', encoding='utf8') as f:
         for line in f:
                 values = line.split()
                 word = values[0]
@@ -195,15 +195,15 @@ def pad_text(tokenized_text, maxlen, pad_tkn):
 
 def load_data_per_category(path_dir, category, summary_dict):
     data = []
-    data_dir = DATA_PATH + path_dir + "/" + category + "/"
-    urls_path = DATA_PATH + path_dir + "/urls_%s.txt" % category
-    with open(urls_path, 'r') as f:
+    data_dir = DATA_PATH + path_dir + "\\" + category + "\\"
+    urls_path = DATA_PATH + path_dir + "\\urls_%s.txt" % category
+    with open(urls_path, 'r', encoding='utf8') as f:
         urls = f.readlines()
     paths = os.listdir(data_dir)
     for path in paths:
         doc = int(path.split(".")[0].split("_")[0])
         score = int(path.split(".")[0].split("_")[1])
-        with open(data_dir + path, 'r') as f:
+        with open(data_dir + path, 'r', encoding='utf8') as f:
             text = f.read()
         movie_id = urls[doc].split("/")[-2]
         data.append(Review(text=text, summary=summary_dict[movie_id],
